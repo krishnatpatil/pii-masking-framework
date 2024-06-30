@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Records</title>
+</head>
+
+<body>
+    <h1>Update Records</h1>
+    {% if success_message %}
+    <div class="success-message">
+        <p>{{ success_message }}</p>
+    </div>
+    {% endif %}
+    {% if error_message %}
+    <div class="error-message">
+        <p>{{ error_message }}</p>
+    </div>
+    {% endif %}
+    <form action="/update" method="POST">
+        <input type="hidden" id="database_type" name="database_type" value="">
+        <input type="hidden" id="table_name" name="table_name" value="">
+        <label for="columns">Select Columns:</label>
+        <select id="columns" name="columns" multiple>
+            <!-- Options will be populated dynamically using JavaScript or Flask -->
+        </select><br><br>
+        <label for="new_values">New Values:</label>
+        <input type="text" id="new_values" name="new_values" required><br><br>
+        <button type="submit">Update Records</button>
+    </form>
+</body>
+
+</html>
