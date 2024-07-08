@@ -1,29 +1,25 @@
-import snowflake.connector
-from .connector import DatabaseConnector
+from .db_connector import DBConnector
+from snowflake.sqlalchemy import URL
+from sqlalchemy import create_engine
 
-class SnowflakeConnector(DatabaseConnector):
-    def __init__(self, username, password, account, warehouse, database, schema):
-        self.connection_params = {
-            'user': username,
-            'password': password,
-            'account': account,
-            'warehouse': warehouse,
-            'database': database,
-            'schema': schema
-        }
-        self.connection = None
+class SnowflakeConnector(DBConnector):
 
-    def get_engine(self):
-        self.connection = snowflake.connector.connect(**self.connection_params)
-        return self.connection
+    def __init__(self, config):
+        self.config = config
+        self.engine = None
 
-    def get_metadata(self):
-        cursor = self.connection.cursor()
-        cursor.execute("SHOW TABLES")
-        tables = [row[1] for row in cursor.fetchall()]
-        metadata = {}
-        for table in tables:
-            cursor.execute(f"DESCRIBE TABLE {table}")
-            columns = cursor.fetchall()
-            metadata[table] = [{'name': col[0], 'type': col[1]} for col in columns]
-        return metadata
+    def connect(self):
+        url = URL(
+            account=self.config['account'],
+            user=self.config['user'],
+            password=self.config['password'],
+            database=self.config['database'],
+            schema=self.config['schema'],
+            warehouse=self.config['warehouse'],
+            role=self.config['role']
+        )
+        self.engine = create_engine(url)
+
+    def execute_query(self, query: str):
+        with self.engine.connect() as conn:
+            conn.execute(query)

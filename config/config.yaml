@@ -1,30 +1,18 @@
-database:
-  type: mysql  # or mysql, oracle, snowflake, s3
-  username: user
-  password: password
-  host: localhost
-  port: 5432
-  database_name: database_name
-  warehouse: WH  # Specific to Snowflake
-  bucket: mybucket  # Specific to S3
-  region: us-west-1  # Specific to S3
+masking_rules:
+  name: 'Z' * length
+  address: nullify city_state
+  phone: '999-999-9999'
+  ssn: '999-99-9999'
+  financial_details: nullify
+  dob: '01/01/1099'
 
-logging:
-  version: 1
-  formatters:
-    detailed:
-      format: '%(asctime)s %(name)s %(levelname)s: %(message)s'
-  handlers:
-    console:
-      class: logging.StreamHandler
-      level: DEBUG
-      formatter: detailed
-      stream: ext://sys.stdout
-    file:
-      class: logging.FileHandler
-      level: INFO
-      formatter: detailed
-      filename: logs/pii_masking.log
-  root:
-    level: DEBUG
-    handlers: [console, file]
+tables:
+  - name: customers
+    columns:
+      name: name
+      address: address
+      phone: phone_number
+      ssn: ssn
+      financial: financial_details
+      dob: date_of_birth
+    relationships: []

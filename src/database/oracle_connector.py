@@ -1,19 +1,23 @@
-from sqlalchemy import create_engine, inspect
-from .connector import DatabaseConnector
+from .db_connector import DBConnector
+import cx_Oracle
 
-class OracleConnector(DatabaseConnector):
-    def __init__(self, username, password, host, port, database):
-        self.connection_string = f"oracle+cx_oracle://{username}:{password}@{host}:{port}/?service_name={database}"
-        self.engine = create_engine(self.connection_string)
+class OracleConnector(DBConnector):
 
-    def get_engine(self):
-        return self.engine
+    def __init__(self, config):
+        self.config = config
+        self.connection = None
 
-    def get_metadata(self):
-        inspector = inspect(self.engine)
-        tables = inspector.get_table_names()
-        metadata = {}
-        for table in tables:
-            columns = inspector.get_columns(table)
-            metadata[table] = columns
-        return metadata
+    def connect(self):
+        self.connection = cx_Oracle.connect(
+            self.config['username'],
+            self.config['password'],
+            self.config['host'],
+            self.config['port'],
+            self.config['service_name']
+        )
+
+    def execute_query(self, query: str):
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        self.connection.commit()
+        cursor.close()
