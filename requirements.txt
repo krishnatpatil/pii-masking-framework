@@ -1,0 +1,6 @@
+SQLAlchemy
+PyYAML
+mysql-connector-python
+cx_Oracle
+snowflake-connector-python
+boto3

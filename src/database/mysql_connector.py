@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine, inspect
 from .connector import DatabaseConnector
 
-class OracleConnector(DatabaseConnector):
+class MySQLConnector(DatabaseConnector):
     def __init__(self, username, password, host, port, database):
-        self.connection_string = f"oracle+cx_oracle://{username}:{password}@{host}:{port}/?service_name={database}"
+        self.connection_string = f"mysql+mysqlconnector://{username}:{password}@{host}:{port}/{database}"
         self.engine = create_engine(self.connection_string)
 
     def get_engine(self):
