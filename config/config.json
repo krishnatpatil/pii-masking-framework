@@ -1,0 +1,20 @@
+{
+    "schema": {
+        "tables": ["table1", "table2", "table3"],
+        "columns": {
+            "table1": ["id", "name", "table2_id"],
+            "table2": ["id", "description", "table3_id"],
+            "table3": ["id", "details"]
+        },
+        "foreign_keys": [
+            {"from_table": "table1", "from_column": "table2_id", "to_table": "table2", "to_column": "id"},
+            {"from_table": "table2", "from_column": "table3_id", "to_table": "table3", "to_column": "id"}
+        ]
+    },
+    "start_table": "table1",
+    "end_table": "table3",
+    "select_columns": {
+        "table1": ["id", "name"],
+        "table3": ["details"]
+    }
+}

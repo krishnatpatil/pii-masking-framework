@@ -1,0 +1,54 @@
+{
+    "schema": {
+        "tables": [
+            "ods_case",
+            "ods_contact",
+            "ods_client"
+        ],
+        "columns": {
+            "ods_case": [
+                "caseid",
+                "clntid",
+                "sttscd",
+                "casetrmdt"
+            ],
+            "ods_contact": [
+                "cntctid",
+                "caseid",
+                "phnnbr"
+            ],
+            "ods_client": [
+                "clntid",
+                "full_name"
+            ]
+        },
+        "foreign_keys": [
+            {
+                "from_table": "ods_case",
+                "from_column": "caseid",
+                "to_table": "ods_contact",
+                "to_column": "caseid"
+            },
+            {
+                "from_table": "ods_case",
+                "from_column": "clntid",
+                "to_table": "ods_client",
+                "to_column": "clntid"
+            }
+        ]
+    },
+    "start_table1": "ods_client",
+    "end_table1": "ods_case",
+    "select_columns1": {
+        "ods_client": [
+            "clntid"
+        ]
+    },
+    "start_table": "ods_contact",
+    "end_table": "ods_case",
+    "select_columns": {
+        "ods_contact": [
+            "caseid"
+        ]
+    }
+}
